@@ -16,14 +16,45 @@ const BoardVisualizer: React.FC<BoardVisualizerProps> = ({ type }) => {
 
   const pins = type === BoardType.UNO ? UNO_PINS : NANO_PINS;
 
+  // Function to generate a pleasant UI "blip" sound using Web Audio API
+  const playClickSound = () => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      // A soft sine wave that drops in pitch (UI "bubble" pop sound)
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.15);
+
+      // Quick fade out
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    } catch (e) {
+      console.error("Audio feedback error", e);
+    }
+  };
+
   // Function to handle clicking a pin
   const handlePinClick = (pin: PinInfo) => {
+    playClickSound();
     setSelectedPin(pin);
     setAiExplanation(null); // Reset AI explanation when switching pins
   };
 
   const handleAiExplain = async () => {
     if (!selectedPin) return;
+    playClickSound(); // Feedback for button press too
     setLoadingAi(true);
     const explanation = await explainComponent(selectedPin.label, `Placa Arduino ${type}`);
     setAiExplanation(explanation);
@@ -54,7 +85,7 @@ const BoardVisualizer: React.FC<BoardVisualizerProps> = ({ type }) => {
             <button
               key={pin.id}
               onClick={() => handlePinClick(pin)}
-              className={`absolute w-6 h-6 -ml-3 -mt-3 rounded-full border-2 shadow-lg transition-transform transform hover:scale-125 focus:outline-none z-20 flex items-center justify-center
+              className={`absolute w-6 h-6 -ml-3 -mt-3 rounded-full border-2 shadow-lg transition-transform duration-200 transform hover:scale-125 active:scale-90 focus:outline-none z-20 flex items-center justify-center
                 ${selectedPin?.id === pin.id 
                   ? 'bg-yellow-400 border-white animate-pulse ring-4 ring-yellow-400/30' 
                   : 'bg-white/80 border-slate-600 hover:bg-yellow-100 hover:border-yellow-500'}`}
@@ -154,7 +185,10 @@ const BoardVisualizer: React.FC<BoardVisualizerProps> = ({ type }) => {
           <div className="animate-fadeIn">
             <div className="flex justify-between items-start mb-2">
               <h3 className="text-xl font-bold text-[#00979D]">{selectedPin.label}</h3>
-              <button onClick={() => setSelectedPin(null)} className="text-slate-400 hover:text-slate-600">
+              <button 
+                onClick={() => setSelectedPin(null)} 
+                className="text-slate-400 hover:text-slate-600 transition-colors"
+              >
                 <X size={20} />
               </button>
             </div>
@@ -198,7 +232,7 @@ const BoardVisualizer: React.FC<BoardVisualizerProps> = ({ type }) => {
                 <button
                   onClick={handleAiExplain}
                   disabled={loadingAi}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-lg hover:from-violet-700 hover:to-indigo-700 transition-all shadow-md disabled:opacity-50 font-medium text-sm"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-lg hover:from-violet-700 hover:to-indigo-700 transition-all shadow-md disabled:opacity-50 font-medium text-sm active:scale-95"
                 >
                   {loadingAi ? (
                     <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
