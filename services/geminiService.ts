@@ -2,11 +2,12 @@ import { GoogleGenAI } from "@google/genai";
 
 export const explainComponent = async (componentName: string, context: string): Promise<string> => {
   try {
-    // Vite replaces this string during build
+    // En Vite, definimos process.env.API_KEY en el config. 
+    // Usamos una verificación simple para evitar errores de referencia.
     const apiKey = process.env.API_KEY;
     
-    if (!apiKey) {
-      console.warn("API Key is missing.");
+    if (!apiKey || apiKey === "undefined") {
+      console.warn("API Key is missing or invalid.");
       return "IA No disponible en este momento (Falta configuración de API Key).";
     }
 
