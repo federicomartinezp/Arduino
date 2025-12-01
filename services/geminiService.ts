@@ -2,12 +2,9 @@ import { GoogleGenAI } from "@google/genai";
 
 export const explainComponent = async (componentName: string, context: string): Promise<string> => {
   try {
-    // Check for API Key availability defensively
-    // We check typeof process first to avoid ReferenceError in pure browser environments
-    let apiKey = '';
-    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
-      apiKey = process.env.API_KEY;
-    }
+    // Vite reemplazará process.env.API_KEY con el valor real al construir
+    // @ts-ignore
+    const apiKey = process.env.API_KEY;
     
     if (!apiKey) {
       console.warn("API Key is missing for Google GenAI.");
