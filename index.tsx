@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import './index.css'; // Import CSS so Tailwind styles are applied
 
 const rootElement = document.getElementById('root');
 
@@ -14,7 +15,6 @@ if (rootElement) {
     );
   } catch (err) {
     console.error("Application initialization error:", err);
-    // Render a fallback error message if React fails to mount
     rootElement.innerHTML = `
       <div style="display: flex; height: 100vh; justify-content: center; align-items: center; text-align: center; font-family: sans-serif; color: #ef4444;">
         <div>
