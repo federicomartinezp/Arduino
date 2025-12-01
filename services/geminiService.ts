@@ -3,7 +3,11 @@ import { GoogleGenAI } from "@google/genai";
 export const explainComponent = async (componentName: string, context: string): Promise<string> => {
   try {
     // Check for API Key availability defensively
-    const apiKey = process.env.API_KEY;
+    // We check typeof process first to avoid ReferenceError in pure browser environments
+    let apiKey = '';
+    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+      apiKey = process.env.API_KEY;
+    }
     
     if (!apiKey) {
       console.warn("API Key is missing for Google GenAI.");
@@ -11,7 +15,6 @@ export const explainComponent = async (componentName: string, context: string): 
     }
 
     // Initialize Gemini Client lazily inside the function
-    // This prevents the "White Screen of Death" if initialization fails at module level
     const ai = new GoogleGenAI({ apiKey });
     
     const model = 'gemini-2.5-flash';
@@ -30,7 +33,6 @@ export const explainComponent = async (componentName: string, context: string): 
     return response.text || "No se pudo generar una explicación en este momento.";
   } catch (error) {
     console.error("Error fetching explanation from Gemini:", error);
-    // User requested friendly error message
     return "IA No disponible en este momento.";
   }
 };
