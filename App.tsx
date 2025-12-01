@@ -62,7 +62,7 @@ const App: React.FC = () => {
         </div>
 
         <div className="p-4 border-t border-slate-100">
-          <p className="text-xs text-center text-slate-400">Hecho para aprender</p>
+          <p className="text-xs text-center text-slate-400">Hecho para aprender <br/> by Federico Martínez</p>
         </div>
       </div>
 

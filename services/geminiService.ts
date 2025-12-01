@@ -1,10 +1,19 @@
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize Gemini Client
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export const explainComponent = async (componentName: string, context: string): Promise<string> => {
   try {
+    // Check for API Key availability defensively
+    const apiKey = process.env.API_KEY;
+    
+    if (!apiKey) {
+      console.warn("API Key is missing for Google GenAI.");
+      return "IA No disponible en este momento (Falta configuración).";
+    }
+
+    // Initialize Gemini Client lazily inside the function
+    // This prevents the "White Screen of Death" if initialization fails at module level
+    const ai = new GoogleGenAI({ apiKey });
+    
     const model = 'gemini-2.5-flash';
     const prompt = `
       Eres un experto profesor de robótica y programación para principiantes.
@@ -21,6 +30,7 @@ export const explainComponent = async (componentName: string, context: string): 
     return response.text || "No se pudo generar una explicación en este momento.";
   } catch (error) {
     console.error("Error fetching explanation from Gemini:", error);
-    return "Hubo un error al consultar al asistente inteligente.";
+    // User requested friendly error message
+    return "IA No disponible en este momento.";
   }
 };
