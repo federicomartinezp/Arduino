@@ -2,19 +2,14 @@ import { GoogleGenAI } from "@google/genai";
 
 export const explainComponent = async (componentName: string, context: string): Promise<string> => {
   try {
-    // Check for API Key availability defensively
-    // We check typeof process first to avoid ReferenceError in pure browser environments
-    let apiKey = '';
-    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
-      apiKey = process.env.API_KEY;
-    }
+    // Vite replaces this string during build
+    const apiKey = process.env.API_KEY;
     
     if (!apiKey) {
-      console.warn("API Key is missing for Google GenAI.");
-      return "IA No disponible en este momento (Falta configuración).";
+      console.warn("API Key is missing.");
+      return "IA No disponible en este momento (Falta configuración de API Key).";
     }
 
-    // Initialize Gemini Client lazily inside the function
     const ai = new GoogleGenAI({ apiKey });
     
     const model = 'gemini-2.5-flash';
