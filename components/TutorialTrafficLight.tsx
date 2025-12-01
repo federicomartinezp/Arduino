@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { TRAFFIC_LIGHT_CODE } from '../constants';
 import CodeBlock from './CodeBlock';
-import { ChevronRight, ChevronLeft, Lightbulb } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Lightbulb, ArrowLeft } from 'lucide-react';
 
-const TutorialTrafficLight: React.FC = () => {
+interface TutorialTrafficLightProps {
+  onBack: () => void;
+}
+
+const TutorialTrafficLight: React.FC<TutorialTrafficLightProps> = ({ onBack }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
@@ -78,6 +82,15 @@ const TutorialTrafficLight: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto">
+      <div className="mb-6">
+        <button 
+          onClick={onBack}
+          className="flex items-center gap-2 text-slate-500 hover:text-[#00979D] transition-colors text-sm font-bold uppercase tracking-wide"
+        >
+          <ArrowLeft size={16} /> Volver a Proyectos
+        </button>
+      </div>
+
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-800 flex items-center justify-center gap-2">
           <Lightbulb className="text-yellow-500" /> Semáforo Simple

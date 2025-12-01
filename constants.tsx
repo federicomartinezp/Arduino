@@ -3,11 +3,11 @@ import { BoardType, PinInfo, ProjectStep } from './types';
 
 export const INTRO_CONTENT = {
   title: "¡Bienvenido al mundo Arduino!",
-  description: "Imagina que tienes un pequeño cerebro de computadora en la palma de tu mano que puede sentir el mundo y controlarlo. ¡Eso es Arduino! Es una placa electrónica que puedes programar muy fácilmente para encender luces, mover motores, leer sensores de temperatura y crear casi cualquier invento que imagines.",
+  description: "Imagina que tienes un pequeño cerebro de computadora en la palma de tu mano. Arduino es una placa electrónica que puedes programar para encender luces, mover motores, leer sensores y crear casi cualquier invento que imagines.",
   usage: [
     "Crear tu propio robot mascota",
     "Automatizar las luces de tu habitación",
-    "Construir una estación de clima casera",
+    "Construir una estación de clima",
     "Hacer instrumentos musicales extraños",
     "Aprender lógica de programación jugando"
   ]

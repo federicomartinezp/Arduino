@@ -3,6 +3,8 @@ import { BoardType } from './types';
 import BoardVisualizer from './components/BoardVisualizer';
 import TutorialTrafficLight from './components/TutorialTrafficLight';
 import IdeSetup from './components/IdeSetup';
+import IntroAnimation from './components/IntroAnimation';
+import ProjectsHub from './components/ProjectsHub';
 import { INTRO_CONTENT } from './constants';
 import { Cpu, BookOpen, Download, LayoutGrid, ArrowRight, Menu, X } from 'lucide-react';
 
@@ -10,7 +12,8 @@ enum View {
   INTRO = 'INTRO',
   BOARD_UNO = 'BOARD_UNO',
   BOARD_NANO = 'BOARD_NANO',
-  PROJECT = 'PROJECT',
+  PROJECTS_HUB = 'PROJECTS_HUB',
+  PROJECT_TRAFFIC_LIGHT = 'PROJECT_TRAFFIC_LIGHT',
   IDE = 'IDE'
 }
 
@@ -25,7 +28,7 @@ const App: React.FC = () => {
         setIsMenuOpen(false);
       }}
       className={`flex items-center gap-3 px-4 py-3 w-full text-left rounded-lg transition-all
-        ${currentView === view 
+        ${currentView === view || (view === View.PROJECTS_HUB && currentView === View.PROJECT_TRAFFIC_LIGHT)
           ? 'bg-[#00979D] text-white shadow-md' 
           : 'text-slate-600 hover:bg-slate-100'}`}
     >
@@ -57,7 +60,7 @@ const App: React.FC = () => {
           <NavItem view={View.BOARD_UNO} label="Arduino UNO" icon={Cpu} />
           <NavItem view={View.BOARD_NANO} label="Arduino Nano" icon={Cpu} />
           <div className="pt-4 pb-2 px-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Aprender</div>
-          <NavItem view={View.PROJECT} label="Proyecto Semáforo" icon={BookOpen} />
+          <NavItem view={View.PROJECTS_HUB} label="Proyectos" icon={BookOpen} />
           <NavItem view={View.IDE} label="Instalar IDE" icon={Download} />
         </div>
 
@@ -72,21 +75,18 @@ const App: React.FC = () => {
           
           {/* Intro View */}
           {currentView === View.INTRO && (
-            <div className="animate-fadeIn space-y-8">
-              <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-8 md:p-12 shadow-xl">
-                <h2 className="text-4xl md:text-5xl font-bold mb-6">{INTRO_CONTENT.title}</h2>
-                <p className="text-lg md:text-xl text-slate-300 leading-relaxed mb-8 max-w-2xl">
-                  {INTRO_CONTENT.description}
-                </p>
-                <button 
-                  onClick={() => setCurrentView(View.BOARD_UNO)}
-                  className="bg-[#00979D] hover:bg-[#007f85] text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 transition-all shadow-lg hover:shadow-[#00979D]/50"
-                >
-                  Comenzar a Explorar <ArrowRight size={20} />
-                </button>
+            <div className="animate-fadeIn space-y-12">
+              <div className="text-center md:text-left">
+                 <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">{INTRO_CONTENT.title}</h2>
+                 <p className="text-lg text-slate-600 max-w-3xl leading-relaxed mb-8">
+                   {INTRO_CONTENT.description}
+                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              {/* Interactive Component */}
+              <IntroAnimation />
+
+              <div className="grid md:grid-cols-2 gap-6 pt-4">
                 <div className="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
                   <h3 className="text-xl font-bold text-slate-800 mb-4">¿Qué puedes hacer?</h3>
                   <ul className="space-y-3">
@@ -101,9 +101,15 @@ const App: React.FC = () => {
                 
                 <div className="bg-[#eafafa] p-8 rounded-xl border border-cyan-100 flex flex-col justify-center items-start">
                   <h3 className="text-xl font-bold text-[#007f85] mb-2">Comunidad Global</h3>
-                  <p className="text-slate-600 mb-4">
-                    Al usar Arduino, te unes a millones de creadores en todo el mundo. El hardware es libre, lo que significa que cualquiera puede estudiarlo y mejorarlo.
+                  <p className="text-slate-600 mb-6">
+                    Al usar Arduino, te unes a millones de creadores en todo el mundo. El hardware es libre, cualquiera puede estudiarlo y mejorarlo.
                   </p>
+                   <button 
+                    onClick={() => setCurrentView(View.BOARD_UNO)}
+                    className="bg-[#00979D] hover:bg-[#007f85] text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 transition-all shadow-md"
+                  >
+                    Empezar a Explorar <ArrowRight size={18} />
+                  </button>
                 </div>
               </div>
             </div>
@@ -127,10 +133,17 @@ const App: React.FC = () => {
             </div>
           )}
 
-          {/* Project View */}
-          {currentView === View.PROJECT && (
+          {/* Project Hub */}
+          {currentView === View.PROJECTS_HUB && (
+            <ProjectsHub onSelectProject={(id) => {
+              if(id === 'traffic_light') setCurrentView(View.PROJECT_TRAFFIC_LIGHT);
+            }} />
+          )}
+
+          {/* Specific Project: Traffic Light */}
+          {currentView === View.PROJECT_TRAFFIC_LIGHT && (
             <div className="animate-fadeIn">
-              <TutorialTrafficLight />
+              <TutorialTrafficLight onBack={() => setCurrentView(View.PROJECTS_HUB)} />
             </div>
           )}
 
