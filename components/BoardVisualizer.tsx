@@ -33,59 +33,118 @@ const BoardVisualizer: React.FC<BoardVisualizerProps> = ({ type }) => {
   return (
     <div className="flex flex-col lg:flex-row gap-6 h-full min-h-[500px]">
       {/* Board Display Area */}
-      <div className="flex-1 bg-slate-100 rounded-xl p-8 relative flex items-center justify-center border border-slate-200 shadow-inner overflow-hidden select-none">
+      <div className="flex-1 bg-slate-100 rounded-xl p-8 relative flex items-center justify-center border border-slate-200 shadow-inner overflow-hidden select-none min-h-[400px]">
         <h3 className="absolute top-4 left-4 text-slate-400 font-bold tracking-widest opacity-50 text-xl pointer-events-none">
           ARDUINO {type}
         </h3>
         
         {/* CSS-based Board Representation */}
         <div 
-          className={`relative shadow-2xl transition-all duration-500 ${type === BoardType.UNO ? 'w-[300px] h-[420px] rounded-sm' : 'w-[120px] h-[350px] rounded-sm'}`}
-          style={{ backgroundColor: '#00979D' }} // Arduino Teal
+          className={`relative shadow-2xl transition-all duration-500`}
+          style={{ 
+            backgroundColor: '#00979D', // Arduino Teal
+            // Landscape layout for UNO based on image reference, Portrait for Nano
+            width: type === BoardType.UNO ? '460px' : '140px',
+            height: type === BoardType.UNO ? '320px' : '400px',
+            borderRadius: type === BoardType.UNO ? '10px' : '4px',
+          }} 
         >
           {/* Pins / Hotspots */}
           {pins.map((pin) => (
             <button
               key={pin.id}
               onClick={() => handlePinClick(pin)}
-              className={`absolute w-6 h-6 -ml-3 -mt-3 rounded-full border-2 shadow-lg transition-transform transform hover:scale-125 focus:outline-none z-10 flex items-center justify-center
+              className={`absolute w-6 h-6 -ml-3 -mt-3 rounded-full border-2 shadow-lg transition-transform transform hover:scale-125 focus:outline-none z-20 flex items-center justify-center
                 ${selectedPin?.id === pin.id 
                   ? 'bg-yellow-400 border-white animate-pulse ring-4 ring-yellow-400/30' 
-                  : 'bg-white/90 border-slate-600 hover:bg-yellow-100'}`}
+                  : 'bg-white/80 border-slate-600 hover:bg-yellow-100 hover:border-yellow-500'}`}
               style={{ left: `${pin.x}%`, top: `${pin.y}%` }}
               aria-label={pin.label}
             >
-              <div className="w-2 h-2 bg-slate-800 rounded-full"></div>
+              <div className="w-1.5 h-1.5 bg-slate-800 rounded-full"></div>
             </button>
           ))}
 
           {/* Decorative PCB Elements */}
           <div className="absolute inset-2 border-2 border-white/20 rounded opacity-50 pointer-events-none"></div>
+          
           {type === BoardType.UNO && (
             <>
-              {/* USB Port */}
-              <div className="absolute top-[-10px] left-[10px] w-16 h-10 bg-slate-300 border-2 border-slate-400 rounded-sm"></div>
-              {/* Power Jack */}
-              <div className="absolute bottom-4 left-[-10px] w-12 h-14 bg-black border border-slate-700 rounded-sm"></div>
-              {/* Chip */}
-              <div className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-10 h-32 bg-slate-900 rounded flex items-center justify-center">
-                 <span className="text-[8px] text-slate-500 -rotate-90">ATMEGA328P</span>
+              {/* 1. USB Port (Large Silver Square - Left Top) */}
+              <div className="absolute top-[15%] left-[-10px] w-14 h-16 bg-slate-300 border-2 border-slate-400 rounded-r-md shadow-sm z-10"></div>
+              
+              {/* 2. Power Jack (Black Barrel - Left Bottom) */}
+              <div className="absolute bottom-[10%] left-[-5px] w-12 h-14 bg-black border border-slate-700 rounded-r-md shadow-sm z-10"></div>
+              
+              {/* Digital Headers (Top Edge) */}
+              <div className="absolute top-[2%] right-[25%] w-32 h-4 bg-black/80 flex gap-0.5 px-1 items-center justify-center">
+                {Array.from({length: 8}).map((_, i) => <div key={i} className="w-0.5 h-0.5 bg-slate-400 rounded-full mx-auto" />)}
+              </div>
+              <div className="absolute top-[2%] right-[5%] w-24 h-4 bg-black/80 flex gap-0.5 px-1 items-center justify-center">
+                 {Array.from({length: 6}).map((_, i) => <div key={i} className="w-0.5 h-0.5 bg-slate-400 rounded-full mx-auto" />)}
+              </div>
+
+              {/* Analog & Power Headers (Bottom Edge) */}
+              <div className="absolute bottom-[2%] right-[50%] w-24 h-4 bg-black/80 flex gap-0.5 px-1 items-center justify-center">
+                 {Array.from({length: 6}).map((_, i) => <div key={i} className="w-0.5 h-0.5 bg-slate-400 rounded-full mx-auto" />)}
+              </div>
+              <div className="absolute bottom-[2%] right-[20%] w-24 h-4 bg-black/80 flex gap-0.5 px-1 items-center justify-center">
+                 {Array.from({length: 6}).map((_, i) => <div key={i} className="w-0.5 h-0.5 bg-slate-400 rounded-full mx-auto" />)}
+              </div>
+
+              {/* 6. Microcontroller (Long Black Chip - Bottom Right Quadrant) */}
+              <div className="absolute bottom-[30%] right-[15%] w-36 h-10 bg-slate-900 rounded-sm flex items-center justify-center shadow-md">
+                 <span className="text-[10px] text-slate-500 tracking-widest font-mono">ATMEGA328P</span>
+                 <div className="absolute -left-1 w-2 h-full border-r border-slate-700"></div>
+                 <div className="absolute -right-1 w-2 h-full border-l border-slate-700"></div>
+              </div>
+
+              {/* 13. Reset Button (Top Leftish) */}
+              <div className="absolute top-[10%] left-[18%] w-6 h-6 bg-white/20 rounded-sm flex items-center justify-center border border-white/40">
+                <div className="w-4 h-4 bg-red-500 rounded-full shadow-inner"></div>
+              </div>
+
+              {/* ICSP Header (Far Right) */}
+              <div className="absolute top-[45%] right-[2%] w-4 h-8 grid grid-cols-2 gap-1">
+                 {Array.from({length: 6}).map((_, i) => <div key={i} className="w-1 h-1 bg-yellow-500 rounded-full" />)}
+              </div>
+
+              {/* Labels */}
+              <div className="absolute top-[35%] right-[25%] text-white font-bold text-2xl tracking-tighter opacity-90 font-sans italic">
+                UNO
+              </div>
+              <div className="absolute top-[45%] right-[25%] text-white text-[10px] tracking-widest opacity-80">
+                ARDUINO
+              </div>
+              <div className="absolute top-[30%] left-[30%] text-white text-[8px] opacity-70 rotate-90">
+                MADE IN ITALY
               </div>
             </>
           )}
+
           {type === BoardType.NANO && (
              <>
-              {/* Mini USB */}
-              <div className="absolute top-[-5px] left-[50%] transform -translate-x-1/2 w-10 h-8 bg-slate-300 rounded-sm"></div>
-              {/* Chip */}
-              <div className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rotate-45 bg-slate-900 rounded-sm flex items-center justify-center">
+              {/* Mini USB Top */}
+              <div className="absolute top-[-5px] left-[50%] transform -translate-x-1/2 w-10 h-8 bg-slate-300 rounded-sm border border-slate-400"></div>
+              
+              {/* Side Headers */}
+              <div className="absolute top-[10%] left-[2%] w-3 h-[80%] bg-black/30 flex flex-col justify-between py-1"></div>
+              <div className="absolute top-[10%] right-[2%] w-3 h-[80%] bg-black/30 flex flex-col justify-between py-1"></div>
+
+              {/* Chip Rotated */}
+              <div className="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rotate-45 bg-slate-900 rounded-sm flex items-center justify-center shadow-sm">
+                <div className="w-8 h-8 border border-slate-600 rounded-sm"></div>
+              </div>
+              
+              <div className="absolute bottom-[10%] w-full text-center text-white text-[10px] font-bold opacity-80">
+                NANO
               </div>
             </>
           )}
         </div>
         
-        <p className="absolute bottom-4 text-center text-slate-400 text-sm">
-          Haz clic en los puntos blancos para interactuar
+        <p className="absolute bottom-4 text-center text-slate-400 text-sm flex items-center gap-2">
+          <Info size={14} /> Haz clic en los puntos blancos para interactuar
         </p>
       </div>
 
@@ -110,7 +169,7 @@ const BoardVisualizer: React.FC<BoardVisualizerProps> = ({ type }) => {
               </span>
             </div>
 
-            <p className="text-slate-600 mb-6 leading-relaxed">
+            <p className="text-slate-600 mb-6 leading-relaxed text-sm">
               {selectedPin.description}
             </p>
 

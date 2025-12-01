@@ -13,6 +13,9 @@ export const INTRO_CONTENT = {
   ]
 };
 
+// Layout coordinates (x, y) are based on a landscape Arduino UNO view
+// x: 0 (left) -> 100 (right)
+// y: 0 (top) -> 100 (bottom)
 export const UNO_PINS: PinInfo[] = [
   { 
     id: 'usb', 
@@ -20,62 +23,80 @@ export const UNO_PINS: PinInfo[] = [
     description: 'Es la puerta de entrada. Por aquí cargas tus programas desde la computadora y también le das energía a la placa.', 
     connectionTip: 'Conecta aquí el cable azul "de impresora" que viene con tu kit. El otro extremo va a tu PC.',
     type: 'other', 
-    x: 5, 
-    y: 15 
-  },
-  { 
-    id: 'power_jack', 
-    label: 'Conector de Energía (Jack)', 
-    description: 'Si quieres que tu robot funcione sin estar conectado a la computadora, puedes conectar aquí una batería (de 7 a 12 voltios).', 
-    connectionTip: 'Conecta aquí una batería de 9V o un adaptador de pared. El pin central es positivo (+).',
-    type: 'power', 
-    x: 5, 
-    y: 80 
+    x: 8, 
+    y: 25 
   },
   { 
     id: 'reset', 
     label: 'Botón Reset', 
     description: '¿Tu programa se quedó pegado? Presiona este botón para reiniciarlo desde el principio, como apagar y prender la consola.', 
     type: 'other', 
-    x: 18, 
-    y: 20 
+    x: 20, 
+    y: 12 
   },
   { 
-    id: 'digital_pins', 
-    label: 'Pines Digitales (0-13)', 
-    description: 'Son como interruptores. Pueden encender cosas (OUTPUT) o saber si un botón está presionado (INPUT). Los que tienen un "~" pueden simular intensidades.', 
-    connectionTip: 'Conecta aquí la pata larga (+) de un LED. ¡No olvides una resistencia de 220Ω hacia GND!',
+    id: 'digital_pins_high', 
+    label: 'Pines Digitales (8-13, GND)', 
+    description: 'Parte superior izquierda de los pines. Incluye GND (Tierra) y el pin 13 que tiene un LED integrado.', 
+    connectionTip: 'El pin 13 es especial para pruebas rápidas porque ya tiene una luz.',
     type: 'digital', 
-    codeExample: 'void setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH); // Encender\n}', 
-    x: 85, 
-    y: 20 
+    codeExample: 'void setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);\n}', 
+    x: 55, 
+    y: 5 
   },
   { 
-    id: 'analog_pins', 
-    label: 'Entradas Analógicas (A0-A5)', 
-    description: 'Son los oídos sensibles de Arduino. A diferencia de los digitales (todo o nada), estos pueden medir "cuánto" voltaje hay (útil para sensores de luz, perillas, etc).', 
-    connectionTip: 'Conecta aquí la pata central de un potenciómetro o la salida de un sensor de temperatura.',
-    type: 'analog', 
-    codeExample: 'int valor = analogRead(A0);\n// Lee un valor entre 0 y 1023', 
-    x: 60, 
-    y: 90 
+    id: 'digital_pins_low', 
+    label: 'Pines Digitales (0-7)', 
+    description: 'Parte superior derecha. Los pines 0 (RX) y 1 (TX) se usan para comunicación con la PC, ¡trata de no usarlos para luces al principio!', 
+    connectionTip: 'Los pines con el símbolo "~" (3, 5, 6, 9, 10, 11) sirven para simular voltaje variable (PWM), útil para variar brillo de LEDs.',
+    type: 'digital', 
+    x: 85, 
+    y: 5 
+  },
+  { 
+    id: 'led_l', 
+    label: 'LED Integrado (L)', 
+    description: 'Una pequeña luz naranja que viene soldada a la placa. Está conectada internamente al Pin 13.', 
+    connectionTip: 'No necesitas conectar nada. Si activas el Pin 13 en tu código, esta luz se encenderá.',
+    type: 'digital', 
+    x: 52, 
+    y: 25 
   },
   { 
     id: 'micro', 
     label: 'El Cerebro (ATmega328P)', 
-    description: 'Este chip negro es donde vive tu código. Es el microcontrolador que procesa todas las instrucciones que escribes.', 
+    description: 'Este chip negro rectangular es donde vive tu código. Es el microcontrolador que procesa todas las instrucciones.', 
     type: 'other', 
-    x: 50, 
-    y: 60 
+    x: 75, 
+    y: 70 
   },
   { 
     id: 'power_pins', 
-    label: 'Pines de Poder (5V, 3.3V, GND)', 
-    description: 'GND es Tierra (Negativo). 5V y 3.3V son Energía (Positivo). Úsalos para alimentar tus sensores y circuitos.', 
-    connectionTip: '¡Cuidado! Nunca conectes 5V directamente a GND (cortocircuito). Conecta GND al negativo de tu protoboard.',
+    label: 'Pines de Poder (Power)', 
+    description: 'Abajo a la izquierda. Aquí encuentras 5V, 3.3V para alimentar sensores, y GND (Tierra) para cerrar el circuito.', 
+    connectionTip: 'GND es fundamental. Todos tus circuitos deben conectarse a un pin GND para funcionar.',
     type: 'power', 
-    x: 45, 
-    y: 90 
+    x: 48, 
+    y: 95 
+  },
+  { 
+    id: 'analog_pins', 
+    label: 'Entradas Analógicas (A0-A5)', 
+    description: 'Abajo a la derecha. Son los "sentidos" del Arduino. Miden voltajes variables (de 0 a 5V) y los convierten a números (0 a 1023).', 
+    connectionTip: 'Ideales para potenciómetros, sensores de luz (LDR) o sensores de temperatura.',
+    type: 'analog', 
+    codeExample: 'int sensorValue = analogRead(A0);\nSerial.println(sensorValue);', 
+    x: 78, 
+    y: 95 
+  },
+  { 
+    id: 'power_jack', 
+    label: 'Conector de Energía (Jack)', 
+    description: 'Si quieres que tu robot funcione sin estar conectado a la computadora, puedes conectar aquí una batería externa.', 
+    connectionTip: 'Acepta baterías de 7V a 12V. ¡No uses más de 12V o se calentará mucho!',
+    type: 'power', 
+    x: 8, 
+    y: 80 
   },
 ];
 
@@ -86,30 +107,30 @@ export const NANO_PINS: PinInfo[] = [
     description: 'Igual que en el UNO, pero más pequeño. Sirve para cargar código y dar energía.', 
     connectionTip: 'Usa un cable Mini-USB (común en cámaras viejas o mandos de PS3).',
     type: 'other', 
-    x: 10, 
-    y: 50 
+    x: 50, 
+    y: 2 
   },
   { 
     id: 'nano_digital', 
     label: 'Pines Digitales (D0-D13)', 
-    description: 'Funcionan exactamente igual que en el UNO. D13 suele tener un LED integrado en la placa.', 
-    connectionTip: 'Puedes conectar estos pines directamente a una protoboard para prototipar rápido.',
+    description: 'Lados de la placa. Funcionan igual que en el UNO.', 
+    connectionTip: 'El Nano está diseñado para encajar directo en la protoboard (placa de pruebas).',
     type: 'digital', 
-    x: 50, 
-    y: 10 
+    x: 90, 
+    y: 40 
   },
   { 
     id: 'nano_analog', 
     label: 'Pines Analógicos (A0-A7)', 
-    description: '¡El Nano tiene superpoderes! Tiene 2 entradas analógicas más que el UNO (A6 y A7) para leer más sensores.', 
+    description: 'El Nano tiene 2 entradas analógicas extra (A6 y A7) comparado con el UNO.', 
     type: 'analog', 
-    x: 50, 
-    y: 90 
+    x: 10, 
+    y: 40 
   },
   { 
     id: 'nano_micro', 
     label: 'Chip SMD', 
-    description: 'Es el mismo cerebro que el UNO, pero en formato montaje superficial (muy pequeño) para ahorrar espacio.', 
+    description: 'Es el mismo cerebro que el UNO, pero en formato cuadrado pequeño.', 
     type: 'other', 
     x: 50, 
     y: 50 
