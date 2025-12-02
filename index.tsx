@@ -32,7 +32,7 @@ if (!rootElement) {
             ${err?.message || String(err)}
           </div>
           <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #64748b;">
-            Si estás viendo esto en Vercel, verifica que las <strong>Environment Variables</strong> (API_KEY) estén configuradas correctamente en los Settings del proyecto.
+            Intenta recargar la página. Si el error persiste, verifica la consola de desarrollador (F12).
           </p>
         </div>
       </div>

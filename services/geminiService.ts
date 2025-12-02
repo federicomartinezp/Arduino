@@ -2,13 +2,13 @@ import { GoogleGenAI } from "@google/genai";
 
 export const explainComponent = async (componentName: string, context: string): Promise<string> => {
   try {
-    // En Vite, definimos process.env.API_KEY en el config. 
-    // Usamos una verificación simple para evitar errores de referencia.
+    // Vite reemplazará 'process.env.API_KEY' con el valor real en tiempo de construcción.
+    // Usamos una variable intermedia para evitar errores de linter o runtime directos si process no existe.
     const apiKey = process.env.API_KEY;
     
-    if (!apiKey || apiKey === "undefined") {
+    if (!apiKey || apiKey === "undefined" || apiKey === "") {
       console.warn("API Key is missing or invalid.");
-      return "IA No disponible en este momento (Falta configuración de API Key).";
+      return "IA No disponible. (Configura tu API_KEY en el archivo .env o en Vercel)";
     }
 
     const ai = new GoogleGenAI({ apiKey });
@@ -29,6 +29,6 @@ export const explainComponent = async (componentName: string, context: string): 
     return response.text || "No se pudo generar una explicación en este momento.";
   } catch (error) {
     console.error("Error fetching explanation from Gemini:", error);
-    return "IA No disponible en este momento.";
+    return "IA No disponible en este momento. Intenta más tarde.";
   }
 };
