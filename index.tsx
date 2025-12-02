@@ -5,7 +5,14 @@ import './index.css';
 
 const rootElement = document.getElementById('root');
 
-if (rootElement) {
+if (!rootElement) {
+  document.body.innerHTML = `
+    <div style="color: red; padding: 20px; font-family: sans-serif;">
+      <h1>Error Fatal</h1>
+      <p>No se encontró el elemento con id="root" en el HTML.</p>
+    </div>
+  `;
+} else {
   try {
     const root = ReactDOM.createRoot(rootElement);
     root.render(
@@ -14,19 +21,21 @@ if (rootElement) {
       </React.StrictMode>
     );
   } catch (err: any) {
-    console.error("Critical Initialization Error:", err);
-    // Visual Debugger: Render error to screen so user sees it instead of white screen
-    rootElement.innerHTML = `
-      <div style="padding: 2rem; color: #ef4444; font-family: sans-serif;">
-        <h1 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Error de Inicialización</h1>
-        <p>La aplicación no pudo arrancar. Detalles técnicos:</p>
-        <pre style="background: #fef2f2; padding: 1rem; border-radius: 0.5rem; border: 1px solid #fecaca; overflow: auto;">
-          ${err.message || JSON.stringify(err)}
-        </pre>
-        <p style="margin-top: 1rem; color: #666;">Por favor revisa la consola del navegador (F12) para más detalles.</p>
+    console.error("Critical Render Error:", err);
+    // Visual Debugger: Render error to screen directly into body to bypass React
+    document.body.innerHTML = `
+      <div style="background-color: #fef2f2; color: #991b1b; padding: 2rem; font-family: sans-serif; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div style="max-width: 600px; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #fecaca;">
+          <h1 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; color: #ef4444;">❌ La App no pudo iniciar</h1>
+          <p style="margin-bottom: 1rem;">Se ha detectado un error crítico durante el arranque.</p>
+          <div style="background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 4px; overflow-x: auto; font-family: monospace; font-size: 0.9rem;">
+            ${err?.message || String(err)}
+          </div>
+          <p style="margin-top: 1.5rem; font-size: 0.9rem; color: #64748b;">
+            Si estás viendo esto en Vercel, verifica que las <strong>Environment Variables</strong> (API_KEY) estén configuradas correctamente en los Settings del proyecto.
+          </p>
+        </div>
       </div>
     `;
   }
-} else {
-  document.body.innerHTML = '<h1 style="color:red">Error Fatal: No se encontró el div #root en index.html</h1>';
 }
