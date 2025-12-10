@@ -37,10 +37,10 @@ export const UNO_PINS: PinInfo[] = [
   { 
     id: 'digital_pins_high', 
     label: 'Pines Digitales (8-13, GND)', 
-    description: 'Parte superior izquierda de los pines. Incluye GND (Tierra) y el pin 13 que tiene un LED integrado.', 
-    connectionTip: 'El pin 13 es especial para pruebas rápidas porque ya tiene una luz.',
+    description: 'Parte superior izquierda de los pines. Incluye GND (Tierra) y el pin 13 que tiene un LED integrado. Los pines digitales pueden leer y escribir señales de tipo ON/OFF (HIGH/LOW, 5V o 0V).', 
+    connectionTip: 'El pin 13 es especial para pruebas rápidas porque ya tiene un LED en la placa. Los pines 11, 12 y 13 son ideales para proyectos de LEDs básicos.',
     type: 'digital', 
-    codeExample: 'void setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH);\n}', 
+    codeExample: 'void setup() {\n  pinMode(13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(13, HIGH); // Encender\n  delay(1000);\n  digitalWrite(13, LOW);  // Apagar\n  delay(1000);\n}', 
     x: 55, 
     y: 5 
   },
@@ -82,10 +82,10 @@ export const UNO_PINS: PinInfo[] = [
   { 
     id: 'analog_pins', 
     label: 'Entradas Analógicas (A0-A5)', 
-    description: 'Abajo a la derecha. Son los "sentidos" del Arduino. Miden voltajes variables (de 0 a 5V) y los convierten a números (0 a 1023).', 
-    connectionTip: 'Ideales para potenciómetros, sensores de luz (LDR) o sensores de temperatura.',
+    description: 'Abajo a la derecha. Son los "sentidos" del Arduino. Miden voltajes variables (de 0 a 5V) y los convierten a números (0 a 1023). Esto permite leer sensores que no son simplemente ON/OFF.', 
+    connectionTip: 'Ideales para potenciómetros, sensores de luz (LDR), sensores de temperatura (TMP36) o joysticks. Conecta el sensor al pin A0-A5 y úsalo con analogRead().',
     type: 'analog', 
-    codeExample: 'int sensorValue = analogRead(A0);\nSerial.println(sensorValue);', 
+    codeExample: 'void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int valor = analogRead(A0);\n  Serial.println(valor); // 0-1023\n  delay(100);\n}', 
     x: 78, 
     y: 95 
   },
@@ -104,8 +104,8 @@ export const NANO_PINS: PinInfo[] = [
   { 
     id: 'mini_usb', 
     label: 'Puerto Mini-USB', 
-    description: 'Igual que en el UNO, pero más pequeño. Sirve para cargar código y dar energía.', 
-    connectionTip: 'Usa un cable Mini-USB (común en cámaras viejas o mandos de PS3).',
+    description: 'Igual que en el UNO, pero más pequeño. Sirve para cargar código y dar energía. El Nano es perfecto para proyectos compactos o wearables.', 
+    connectionTip: 'Usa un cable Mini-USB (común en cámaras viejas o mandos de PS3). También puedes alimentarlo por el pin VIN con 7-12V.',
     type: 'other', 
     x: 50, 
     y: 2 
@@ -113,27 +113,39 @@ export const NANO_PINS: PinInfo[] = [
   { 
     id: 'nano_digital', 
     label: 'Pines Digitales (D0-D13)', 
-    description: 'Lados de la placa. Funcionan igual que en el UNO.', 
-    connectionTip: 'El Nano está diseñado para encajar directo en la protoboard (placa de pruebas).',
+    description: 'Lados de la placa. Funcionan igual que en el UNO. Los pines D3, D5, D6, D9, D10, D11 tienen capacidad PWM (~) para simular salidas analógicas.', 
+    connectionTip: 'El Nano está diseñado para encajar directo en la protoboard (placa de pruebas). Cada pin tiene su función serigrafizada en la placa.',
     type: 'digital', 
+    codeExample: 'void setup() {\n  pinMode(D13, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(D13, HIGH);\n  delay(500);\n  digitalWrite(D13, LOW);\n  delay(500);\n}',
     x: 90, 
     y: 40 
   },
   { 
     id: 'nano_analog', 
     label: 'Pines Analógicos (A0-A7)', 
-    description: 'El Nano tiene 2 entradas analógicas extra (A6 y A7) comparado con el UNO.', 
+    description: 'El Nano tiene 2 entradas analógicas extra (A6 y A7) comparado con el UNO. Perfecto para proyectos con múltiples sensores simultáneos.', 
+    connectionTip: 'Usa A0-A5 como entradas analógicas o como pines digitales adicionales. A6 y A7 son solo analógicos.',
     type: 'analog', 
+    codeExample: 'void setup() {\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int sensor = analogRead(A0);\n  Serial.println(sensor);\n  delay(100);\n}',
     x: 10, 
     y: 40 
   },
   { 
     id: 'nano_micro', 
-    label: 'Chip SMD', 
-    description: 'Es el mismo cerebro que el UNO, pero en formato cuadrado pequeño.', 
+    label: 'Chip SMD (ATmega328P)', 
+    description: 'Es el mismo cerebro que el UNO, pero en formato de montaje superficial (SMD). Contiene 32KB de memoria flash para tu código y 2KB de RAM.', 
     type: 'other', 
     x: 50, 
     y: 50 
+  },
+  { 
+    id: 'nano_power', 
+    label: 'Pines de Alimentación', 
+    description: '5V, 3.3V, GND y VIN. El Nano puede alimentar sensores pequeños directamente. GND es imprescindible para cerrar circuitos.', 
+    connectionTip: 'Usa 5V para la mayoría de sensores. 3.3V para módulos especiales. VIN acepta 7-12V para alimentación externa.',
+    type: 'power', 
+    x: 10, 
+    y: 80 
   },
 ];
 
