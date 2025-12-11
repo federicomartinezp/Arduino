@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export const explainComponent = async (componentName: string, context: string): Promise<string> => {
   try {
@@ -11,9 +11,9 @@ export const explainComponent = async (componentName: string, context: string): 
       return "IA No disponible. (Configura tu API_KEY en el archivo .env o en Vercel)";
     }
 
-    const ai = new GoogleGenAI({ apiKey });
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     
-    const model = 'gemini-2.5-flash';
     const prompt = `
       Eres un experto profesor de robótica y programación para principiantes.
       Explica brevemente qué es y para qué sirve: "${componentName}" en el contexto de una placa Arduino (${context}).
@@ -21,12 +21,11 @@ export const explainComponent = async (componentName: string, context: string): 
       Si aplica, da un ejemplo de la vida real.
     `;
 
-    const response = await ai.models.generateContent({
-      model: model,
-      contents: prompt,
-    });
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    const text = response.text();
 
-    return response.text || "No se pudo generar una explicación en este momento.";
+    return text || "No se pudo generar una explicación en este momento.";
   } catch (error) {
     console.error("Error fetching explanation from Gemini:", error);
     return "IA No disponible en este momento. Intenta más tarde.";

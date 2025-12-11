@@ -1,5 +1,8 @@
 {
   "name": "Arduino Start",
-  "description": "Tu guía amigable para aprender Arduino UNO y Nano. Explora las placas, sigue tutoriales paso a paso y consulta con IA.",
+  "version": "1.0.0",
+  "description": "Aprende Arduino interactivamente. Explora placas UNO y Nano, descubre para qué sirve cada pin, construye proyectos paso a paso y obtén explicaciones con IA.",
+  "author": "Federico Martínez",
+  "keywords": ["Arduino", "educación", "electrónica", "programación", "tutorial", "interactivo"],
   "requestFramePermissions": []
 }

@@ -48,21 +48,60 @@ const ProjectsHub: React.FC<ProjectsHubProps> = ({ onSelectProject }) => {
         </div>
 
         {/* Placeholder: Button */}
-        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center text-center opacity-70 grayscale">
+        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center text-center opacity-70 grayscale hover:opacity-90 transition-all">
           <div className="bg-slate-200 p-4 rounded-full mb-4">
             <Lock size={24} className="text-slate-400" />
           </div>
           <h3 className="text-lg font-bold text-slate-700 mb-2">Botón Pulsador</h3>
-          <p className="text-xs text-slate-500 mb-4">Próximamente</p>
+          <p className="text-xs text-slate-500 mb-4">Lee entradas digitales y controla con botones</p>
+          <span className="text-[10px] bg-slate-200 text-slate-600 px-3 py-1 rounded-full font-medium">Próximamente</span>
         </div>
 
         {/* Placeholder: Potentiometer */}
-        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center text-center opacity-70 grayscale">
+        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center text-center opacity-70 grayscale hover:opacity-90 transition-all">
           <div className="bg-slate-200 p-4 rounded-full mb-4">
             <Lock size={24} className="text-slate-400" />
           </div>
           <h3 className="text-lg font-bold text-slate-700 mb-2">Lectura Analógica</h3>
-          <p className="text-xs text-slate-500 mb-4">Próximamente</p>
+          <p className="text-xs text-slate-500 mb-4">Controla brillo de LEDs con potenciómetro</p>
+          <span className="text-[10px] bg-slate-200 text-slate-600 px-3 py-1 rounded-full font-medium">Próximamente</span>
+        </div>
+
+        {/* Category: INTERMEDIATE */}
+        <div className="col-span-full mt-8 mb-4 flex items-center gap-4">
+          <div className="h-px flex-1 bg-slate-200"></div>
+          <span className="text-sm font-bold text-slate-400 uppercase tracking-wider">Nivel Intermedio</span>
+          <div className="h-px flex-1 bg-slate-200"></div>
+        </div>
+
+        {/* Placeholder: Servo Motor */}
+        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center text-center opacity-70 grayscale hover:opacity-90 transition-all">
+          <div className="bg-slate-200 p-4 rounded-full mb-4">
+            <Lock size={24} className="text-slate-400" />
+          </div>
+          <h3 className="text-lg font-bold text-slate-700 mb-2">Servo Motor</h3>
+          <p className="text-xs text-slate-500 mb-4">Controla motores con movimientos precisos</p>
+          <span className="text-[10px] bg-slate-200 text-slate-600 px-3 py-1 rounded-full font-medium">Próximamente</span>
+        </div>
+
+        {/* Placeholder: LCD Display */}
+        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center text-center opacity-70 grayscale hover:opacity-90 transition-all">
+          <div className="bg-slate-200 p-4 rounded-full mb-4">
+            <Lock size={24} className="text-slate-400" />
+          </div>
+          <h3 className="text-lg font-bold text-slate-700 mb-2">Pantalla LCD</h3>
+          <p className="text-xs text-slate-500 mb-4">Muestra mensajes en una pantalla de texto</p>
+          <span className="text-[10px] bg-slate-200 text-slate-600 px-3 py-1 rounded-full font-medium">Próximamente</span>
+        </div>
+
+        {/* Placeholder: Ultrasonic Sensor */}
+        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col items-center justify-center text-center opacity-70 grayscale hover:opacity-90 transition-all">
+          <div className="bg-slate-200 p-4 rounded-full mb-4">
+            <Lock size={24} className="text-slate-400" />
+          </div>
+          <h3 className="text-lg font-bold text-slate-700 mb-2">Sensor Ultrasónico</h3>
+          <p className="text-xs text-slate-500 mb-4">Mide distancias como un radar de murciélago</p>
+          <span className="text-[10px] bg-slate-200 text-slate-600 px-3 py-1 rounded-full font-medium">Próximamente</span>
         </div>
 
       </div>
